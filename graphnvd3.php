@@ -29,8 +29,6 @@ if (!defined('_PS_VERSION_')) {
 
 class GraphNvD3 extends ModuleGraphEngine
 {
-    private $_width;
-    private $_height;
     private $_values;
     private $_legend;
     private $_titles;
@@ -136,8 +134,6 @@ class GraphNvD3 extends ModuleGraphEngine
 
     public function setSize($width, $height)
     {
-        $this->_width = $width;
-        $this->_height = $height;
     }
 
     public function setLegend($legend)
