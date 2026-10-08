@@ -2,7 +2,6 @@
 /**
  * PHPUnit bootstrap for graphnvd3 (PHP 5.4+).
  */
-
 error_reporting(-1);
 
 if (!class_exists('PHPUnit\\Framework\\TestCase') && class_exists('PHPUnit_Framework_TestCase')) {

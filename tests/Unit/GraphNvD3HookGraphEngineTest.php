@@ -7,7 +7,7 @@ class GraphNvD3HookGraphEngineTest extends GraphNvD3TestCase
         $this->resetStubs();
         $drawerUrl = 'http://shop.test/admin/index.php?token=a"b\\c';
         $markup = GraphNvD3::hookGraphEngine(
-            array('width' => '100%', 'height' => 270, 'type' => 'line'),
+            ['width' => '100%', 'height' => 270, 'type' => 'line'],
             $drawerUrl
         );
         $style = $this->parseSvgStyleDeclarations($markup);
@@ -25,7 +25,7 @@ class GraphNvD3HookGraphEngineTest extends GraphNvD3TestCase
     {
         $this->resetStubs();
         $markup = GraphNvD3::hookGraphEngine(
-            array('width' => '640', 'height' => '480', 'type' => 'pie'),
+            ['width' => '640', 'height' => '480', 'type' => 'pie'],
             'http://example.test/draw'
         );
         $style = $this->parseSvgStyleDeclarations($markup);
@@ -42,7 +42,7 @@ class GraphNvD3HookGraphEngineTest extends GraphNvD3TestCase
     {
         $this->resetStubs();
         $markup = GraphNvD3::hookGraphEngine(
-            array('width' => '50 %', 'height' => 10, 'type' => 'line'),
+            ['width' => '50 %', 'height' => 10, 'type' => 'line'],
             'http://example.test/draw'
         );
         $style = $this->parseSvgStyleDeclarations($markup);
@@ -54,7 +54,7 @@ class GraphNvD3HookGraphEngineTest extends GraphNvD3TestCase
     {
         $this->resetStubs();
         $markup = GraphNvD3::hookGraphEngine(
-            array('width' => '800px', 'height' => '270px', 'type' => 'line'),
+            ['width' => '800px', 'height' => '270px', 'type' => 'line'],
             'http://example.test/draw'
         );
         $style = $this->parseSvgStyleDeclarations($markup);
@@ -68,11 +68,11 @@ class GraphNvD3HookGraphEngineTest extends GraphNvD3TestCase
     {
         $this->resetStubs();
         $first = GraphNvD3::hookGraphEngine(
-            array('width' => '100%', 'height' => 100, 'type' => 'line'),
+            ['width' => '100%', 'height' => 100, 'type' => 'line'],
             'http://example.test/one'
         );
         $second = GraphNvD3::hookGraphEngine(
-            array('width' => '100%', 'height' => 100, 'type' => 'line'),
+            ['width' => '100%', 'height' => 100, 'type' => 'line'],
             'http://example.test/two'
         );
         $firstDiv = (int) $this->matchOne('/id\s*=\s*"nvd3_chart_(\d+)"/', $first, 1);

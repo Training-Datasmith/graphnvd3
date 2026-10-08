@@ -7,7 +7,7 @@ class ModuleMetadataTest extends GraphNvD3TestCase
         $this->resetStubs();
         $module = new GraphNvD3();
         $config = $this->parseConfigXmlValues(dirname(dirname(__DIR__)) . '/config.xml');
-        $this->assertArrayHasKeys($config, array('name', 'author', 'tab', 'need_instance', 'displayName', 'version'));
+        $this->assertArrayHasKeys($config, ['name', 'author', 'tab', 'need_instance', 'displayName', 'version']);
         $this->assertSame('graphnvd3', $config['name']);
         $this->assertSame('PrestaShop', $config['author']);
         $this->assertSame('administration', $config['tab']);

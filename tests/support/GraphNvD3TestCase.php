@@ -11,13 +11,13 @@ abstract class GraphNvD3TestCase extends PHPUnit\Framework\TestCase
     /**
      * @param string $pattern
      * @param string $subject
-     * @param int    $group
+     * @param int $group
      *
      * @return string
      */
     protected function matchOne($pattern, $subject, $group = 0)
     {
-        $matches = array();
+        $matches = [];
         $this->assertSame(1, preg_match($pattern, $subject, $matches));
 
         return $matches[$group];
@@ -38,14 +38,14 @@ abstract class GraphNvD3TestCase extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param array        $array
+     * @param array $array
      * @param array|string $keys
      */
     protected function assertArrayHasKeys($array, $keys)
     {
         $this->assertTrue(is_array($array));
         if (!is_array($keys)) {
-            $keys = array($keys);
+            $keys = [$keys];
         }
         foreach ($keys as $key) {
             $this->assertArrayHasKey($key, $array);
@@ -60,7 +60,7 @@ abstract class GraphNvD3TestCase extends PHPUnit\Framework\TestCase
     protected function parseSvgStyleDeclarations($markup)
     {
         $style = $this->matchOne('/<svg[^>]*\sstyle\s*=\s*"([^"]*)"/s', $markup, 1);
-        $declarations = array();
+        $declarations = [];
         foreach (explode(';', $style) as $chunk) {
             $chunk = trim($chunk);
             if ($chunk === '') {
@@ -99,7 +99,7 @@ abstract class GraphNvD3TestCase extends PHPUnit\Framework\TestCase
     {
         $xml = file_get_contents($path);
         $this->assertTrue(is_string($xml) && $xml !== '');
-        $values = array();
+        $values = [];
         if (preg_match_all('/<([a-zA-Z0-9_]+)>(?:<!\[CDATA\[(.*?)\]\]>|([^<]*))<\/\1>/s', $xml, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $m) {
                 if (strpos($m[0], '<![CDATA[') !== false) {
@@ -115,13 +115,13 @@ abstract class GraphNvD3TestCase extends PHPUnit\Framework\TestCase
 
     /**
      * @param GraphNvD3 $drawer
-     * @param string    $type
+     * @param string $type
      *
      * @return array
      */
     protected function captureDrawOutput(GraphNvD3 $drawer, $type)
     {
-        Tools::reset(array('type' => $type));
+        Tools::reset(['type' => $type]);
         ob_start();
         $drawer->draw();
         $output = ob_get_clean();

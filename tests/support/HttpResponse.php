@@ -43,7 +43,7 @@ class HttpResponse
 
         $response = new self();
         $response->status = (int) $m[1];
-        $response->headers = array();
+        $response->headers = [];
         $response->body = $body;
 
         for ($i = 1; $i < count($lines); ++$i) {
@@ -58,7 +58,7 @@ class HttpResponse
             $name = strtolower(trim(substr($line, 0, $colon)));
             $value = trim(substr($line, $colon + 1));
             if (!isset($response->headers[$name])) {
-                $response->headers[$name] = array();
+                $response->headers[$name] = [];
             }
             $response->headers[$name][] = $value;
         }
@@ -82,17 +82,15 @@ class HttpResponse
     }
 
     /**
-     * @param string $name
-     *
      * @return array<int, string>
      */
     public function cacheControlTokens()
     {
         $key = 'cache-control';
         if (!isset($this->headers[$key])) {
-            return array();
+            return [];
         }
-        $tokens = array();
+        $tokens = [];
         foreach ($this->headers[$key] as $value) {
             $parts = explode(',', $value);
             foreach ($parts as $part) {

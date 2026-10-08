@@ -8,7 +8,7 @@ class VersionGuardTest extends GraphNvD3TestCase
         $cmd = 'php -d error_reporting=-1 -r ' . escapeshellarg(
             'include ' . var_export($script, true) . '; echo "NO_GUARD\n";'
         );
-        $output = array();
+        $output = [];
         $exitCode = 0;
         exec($cmd, $output, $exitCode);
         $joined = implode("\n", $output);

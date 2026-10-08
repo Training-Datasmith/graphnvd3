@@ -8,7 +8,7 @@ class GraphNvD3InstallTest extends GraphNvD3TestCase
         $module = new GraphNvD3();
         $this->assertTrue($module->install());
         $this->assertSame(
-            array('GraphEngine', 'actionAdminControllerSetMedia'),
+            ['GraphEngine', 'actionAdminControllerSetMedia'],
             Module::$registeredHooks
         );
     }
@@ -19,7 +19,7 @@ class GraphNvD3InstallTest extends GraphNvD3TestCase
         Module::$installReturn = false;
         $module = new GraphNvD3();
         $this->assertFalse($module->install());
-        $this->assertSame(array(), Module::$registeredHooks);
+        $this->assertSame([], Module::$registeredHooks);
     }
 
     public function testInstallStopsWhenGraphEngineHookRejects()
@@ -28,7 +28,7 @@ class GraphNvD3InstallTest extends GraphNvD3TestCase
         Module::$registerHookFailOn = 'GraphEngine';
         $module = new GraphNvD3();
         $this->assertFalse($module->install());
-        $this->assertSame(array('GraphEngine'), Module::$registeredHooks);
+        $this->assertSame(['GraphEngine'], Module::$registeredHooks);
     }
 
     public function testInstallReturnsFalseWhenMediaHookRejects()
@@ -38,7 +38,7 @@ class GraphNvD3InstallTest extends GraphNvD3TestCase
         $module = new GraphNvD3();
         $this->assertFalse($module->install());
         $this->assertSame(
-            array('GraphEngine', 'actionAdminControllerSetMedia'),
+            ['GraphEngine', 'actionAdminControllerSetMedia'],
             Module::$registeredHooks
         );
     }

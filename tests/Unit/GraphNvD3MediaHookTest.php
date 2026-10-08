@@ -13,7 +13,7 @@ class GraphNvD3MediaHookTest extends GraphNvD3TestCase
         $module->context->controller = $controller;
         $module->context->employee = $employee;
 
-        $module->hookActionAdminControllerSetMedia(array());
+        $module->hookActionAdminControllerSetMedia([]);
 
         $this->assertCount(2, $controller->js);
         $this->assertSame('/js/vendor/d3.v3.min.js', $controller->js[0]);
@@ -31,8 +31,8 @@ class GraphNvD3MediaHookTest extends GraphNvD3TestCase
 
 class GraphNvD3MediaHookTestController
 {
-    public $js = array();
-    public $css = array();
+    public $js = [];
+    public $css = [];
 
     public function addJS($paths)
     {

@@ -25,8 +25,8 @@ class Module
     public static $registerHookReturn = true;
     public static $registerHookFailOn = null;
     public static $constructCallCount = 0;
-    public static $registeredHooks = array();
-    public static $transCalls = array();
+    public static $registeredHooks = [];
+    public static $transCalls = [];
 
     public $name;
     public $tab;
@@ -44,8 +44,8 @@ class Module
         self::$registerHookReturn = true;
         self::$registerHookFailOn = null;
         self::$constructCallCount = 0;
-        self::$registeredHooks = array();
-        self::$transCalls = array();
+        self::$registeredHooks = [];
+        self::$transCalls = [];
     }
 
     public function __construct()
@@ -68,14 +68,14 @@ class Module
         return self::$registerHookReturn;
     }
 
-    protected function trans($id, array $parameters = array(), $domain = null, $locale = null)
+    protected function trans($id, array $parameters = [], $domain = null, $locale = null)
     {
-        self::$transCalls[] = array(
+        self::$transCalls[] = [
             'id' => $id,
             'parameters' => $parameters,
             'domain' => $domain,
             'locale' => $locale,
-        );
+        ];
 
         return $id;
     }
@@ -108,9 +108,9 @@ class ModuleGraphEngine extends Module
 
 class Tools
 {
-    private static $values = array();
+    private static $values = [];
 
-    public static function reset(array $values = array())
+    public static function reset(array $values = [])
     {
         self::$values = $values;
     }

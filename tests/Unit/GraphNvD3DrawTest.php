@@ -2,9 +2,9 @@
 
 class GraphNvD3DrawTest extends GraphNvD3TestCase
 {
-    private function makeDrawer(array $values, array $legend, array $titles)
+    private function makeDrawer(array $values, array $legend, array $titles, $type)
     {
-        $drawer = new GraphNvD3('line');
+        $drawer = new GraphNvD3($type);
         $drawer->createValues($values);
         $drawer->setLegend($legend);
         $drawer->setTitles($titles);
@@ -15,18 +15,20 @@ class GraphNvD3DrawTest extends GraphNvD3TestCase
     public function testLineChartSingleSeriesShape()
     {
         $this->resetStubs();
+        $type = 'line';
         $drawer = $this->makeDrawer(
-            array(0 => 4, 1 => 9),
-            array(),
-            array('main' => 'Orders', 'x' => 'Month', 'y' => 'Total')
+            [0 => 4, 1 => 9],
+            [],
+            ['main' => 'Orders', 'x' => 'Month', 'y' => 'Total'],
+            $type
         );
-        $decoded = $this->captureDrawOutput($drawer, 'line');
-        $this->assertArrayHasKeys($decoded, array('axisLabels', 'data'));
-        $this->assertArrayHasKeys($decoded['axisLabels'], array('xAxis', 'yAxis'));
+        $decoded = $this->captureDrawOutput($drawer, $type);
+        $this->assertArrayHasKeys($decoded, ['axisLabels', 'data']);
+        $this->assertArrayHasKeys($decoded['axisLabels'], ['xAxis', 'yAxis']);
         $this->assertSame('Month', $decoded['axisLabels']['xAxis']);
         $this->assertSame('Total', $decoded['axisLabels']['yAxis']);
         $this->assertCount(1, $decoded['data']);
-        $this->assertArrayHasKeys($decoded['data'][0], array('values', 'key'));
+        $this->assertArrayHasKeys($decoded['data'][0], ['values', 'key']);
         $this->assertSame('Orders', $decoded['data'][0]['key']);
         $this->assertCount(2, $decoded['data'][0]['values']);
         $this->assertSame(0, $decoded['data'][0]['values'][0]['x']);
@@ -38,13 +40,15 @@ class GraphNvD3DrawTest extends GraphNvD3TestCase
     public function testLineChartKeepsNonZeroKeys()
     {
         $this->resetStubs();
+        $type = 'line';
         $drawer = $this->makeDrawer(
-            array(12 => 2, 13 => 5),
-            array(),
-            array('main' => 'M', 'x' => 'X', 'y' => 'Y')
+            [12 => 2, 13 => 5],
+            [],
+            ['main' => 'M', 'x' => 'X', 'y' => 'Y'],
+            $type
         );
-        $decoded = $this->captureDrawOutput($drawer, 'line');
-        $this->assertArrayHasKeys($decoded, array('data'));
+        $decoded = $this->captureDrawOutput($drawer, $type);
+        $this->assertArrayHasKeys($decoded, ['data']);
         $this->assertCount(1, $decoded['data']);
         $this->assertCount(2, $decoded['data'][0]['values']);
         $this->assertSame(12, $decoded['data'][0]['values'][0]['x']);
@@ -54,12 +58,14 @@ class GraphNvD3DrawTest extends GraphNvD3TestCase
     public function testCanonicalIntegerStringsBecomeJsonNumbers()
     {
         $this->resetStubs();
+        $type = 'line';
         $drawer = $this->makeDrawer(
-            array('Jan' => '0', 'Feb' => '12'),
-            array(),
-            array('main' => 'M', 'x' => 'X', 'y' => 'Y')
+            ['Jan' => '0', 'Feb' => '12'],
+            [],
+            ['main' => 'M', 'x' => 'X', 'y' => 'Y'],
+            $type
         );
-        $decoded = $this->captureDrawOutput($drawer, 'line');
+        $decoded = $this->captureDrawOutput($drawer, $type);
         $points = $decoded['data'][0]['values'];
         $this->assertSame('Jan', $points[0]['x']);
         $this->assertSame('Feb', $points[1]['x']);
@@ -70,15 +76,17 @@ class GraphNvD3DrawTest extends GraphNvD3TestCase
     public function testPieChartUsesLegendLabels()
     {
         $this->resetStubs();
+        $type = 'pie';
         $drawer = $this->makeDrawer(
-            array(5, 7),
-            array('France', 'Germany'),
-            array('main' => 'M', 'x' => 'X', 'y' => 'Y')
+            [5, 7],
+            ['France', 'Germany'],
+            ['main' => 'M', 'x' => 'X', 'y' => 'Y'],
+            $type
         );
-        $decoded = $this->captureDrawOutput($drawer, 'pie');
-        $this->assertArrayHasKeys($decoded, array('data'));
+        $decoded = $this->captureDrawOutput($drawer, $type);
+        $this->assertArrayHasKeys($decoded, ['data']);
         $this->assertCount(2, $decoded['data']);
-        $this->assertArrayHasKeys($decoded['data'][0], array('label', 'value'));
+        $this->assertArrayHasKeys($decoded['data'][0], ['label', 'value']);
         $this->assertSame('France', $decoded['data'][0]['label']);
         $this->assertSame(5, $decoded['data'][0]['value']);
         $this->assertSame('Germany', $decoded['data'][1]['label']);
@@ -88,15 +96,17 @@ class GraphNvD3DrawTest extends GraphNvD3TestCase
     public function testLeadingZeroNumericStringDoesNotBreakJson()
     {
         $this->resetStubs();
+        $type = 'line';
         $drawer = $this->makeDrawer(
-            array('01' => '12'),
-            array(),
-            array('main' => 'M', 'x' => 'X', 'y' => 'Y')
+            ['01' => '12'],
+            [],
+            ['main' => 'M', 'x' => 'X', 'y' => 'Y'],
+            $type
         );
-        $decoded = $this->captureDrawOutput($drawer, 'line');
-        $this->assertArrayHasKeys($decoded, array('data'));
+        $decoded = $this->captureDrawOutput($drawer, $type);
+        $this->assertArrayHasKeys($decoded, ['data']);
         $point = $decoded['data'][0]['values'][0];
-        $this->assertArrayHasKeys($point, array('x', 'y'));
+        $this->assertArrayHasKeys($point, ['x', 'y']);
         $this->assertSame('01', $point['x']);
         $this->assertSame(12, $point['y']);
     }
@@ -104,40 +114,53 @@ class GraphNvD3DrawTest extends GraphNvD3TestCase
     public function testMultiSeriesUsesPerLayerKeys()
     {
         $this->resetStubs();
+        $type = 'line';
         $drawer = $this->makeDrawer(
-            array(
-                0 => array(0 => 1, 1 => 2),
-                1 => array(0 => 8, 1 => 9),
-            ),
-            array(),
-            array('main' => array('Visits', 'Sales'), 'x' => 'X', 'y' => 'Y')
+            [
+                0 => [0 => 1, 1 => 2],
+                1 => [0 => 8, 1 => 9],
+            ],
+            [],
+            ['main' => ['Visits', 'Sales'], 'x' => 'X', 'y' => 'Y'],
+            $type
         );
-        $decoded = $this->captureDrawOutput($drawer, 'line');
+        $decoded = $this->captureDrawOutput($drawer, $type);
         $this->assertCount(2, $decoded['data']);
         $this->assertSame('Visits', $decoded['data'][0]['key']);
         $this->assertSame('Sales', $decoded['data'][1]['key']);
+        $this->assertSame(0, $decoded['data'][0]['values'][0]['x']);
+        $this->assertSame(1, $decoded['data'][0]['values'][0]['y']);
+        $this->assertSame(1, $decoded['data'][0]['values'][1]['x']);
+        $this->assertSame(2, $decoded['data'][0]['values'][1]['y']);
+        $this->assertSame(0, $decoded['data'][1]['values'][0]['x']);
+        $this->assertSame(8, $decoded['data'][1]['values'][0]['y']);
+        $this->assertSame(1, $decoded['data'][1]['values'][1]['x']);
+        $this->assertSame(9, $decoded['data'][1]['values'][1]['y']);
     }
 
     public function testEmptyPieIsEmptyList()
     {
         $this->resetStubs();
-        $drawer = $this->makeDrawer(array(), array(), array('main' => 'M', 'x' => 'X', 'y' => 'Y'));
-        $decoded = $this->captureDrawOutput($drawer, 'pie');
-        $this->assertArrayHasKeys($decoded, array('data'));
-        $this->assertSame(array(), $decoded['data']);
+        $type = 'pie';
+        $drawer = $this->makeDrawer([], [], ['main' => 'M', 'x' => 'X', 'y' => 'Y'], $type);
+        $decoded = $this->captureDrawOutput($drawer, $type);
+        $this->assertArrayHasKeys($decoded, ['data']);
+        $this->assertSame([], $decoded['data']);
     }
 
     public function testNullAxisLabelsStayNull()
     {
         $this->resetStubs();
+        $type = 'line';
         $drawer = $this->makeDrawer(
-            array(0 => 1),
-            array(),
-            array('main' => 'M', 'x' => null, 'y' => null)
+            [0 => 1],
+            [],
+            ['main' => 'M', 'x' => null, 'y' => null],
+            $type
         );
-        $decoded = $this->captureDrawOutput($drawer, 'line');
-        $this->assertArrayHasKeys($decoded, array('axisLabels'));
-        $this->assertArrayHasKeys($decoded['axisLabels'], array('xAxis', 'yAxis'));
+        $decoded = $this->captureDrawOutput($drawer, $type);
+        $this->assertArrayHasKeys($decoded, ['axisLabels']);
+        $this->assertArrayHasKeys($decoded['axisLabels'], ['xAxis', 'yAxis']);
         $this->assertNull($decoded['axisLabels']['xAxis']);
         $this->assertNull($decoded['axisLabels']['yAxis']);
     }
